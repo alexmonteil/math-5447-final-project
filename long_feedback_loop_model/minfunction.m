@@ -40,8 +40,8 @@ tspan = [0,totaltime];
 history = [0.1, 0.1, 0.1, 0.1, 0.1];
 
 Tcc = var(9)/1000; % rescale variable
-Tlc = var(18)/1000;
-Tsl = var(19)/1000;
+Tlc = var(18)/1000; % Long loop I to Ctx E delay rescaled
+Tsl = var(19)/1000; % STN to long loop I delay rescaled
 
 %lag = [(Tsg,Tgs),Tgg   , Tcs      , Tsc       , Tcc, Tlc, Tsl]
 lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tlc, Tsl];

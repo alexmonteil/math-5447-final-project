@@ -36,13 +36,13 @@ function  v = model_eqs(~, y, Z, var, flagSTN, flagC, AdjSTN, AdjC)
 %  AdjC     - Adjusted C after blocking wsc
 
 %  OUTPUT:
-%  v - vector representing [S(t+dt), G(t+dt), E(t+dt), I(t+dt)]
+%  v - vector representing [S(t+dt), G(t+dt), E(t+dt), I(t+dt), L(t+dt)]
 
 % time delays
 ylag1 = Z(:,1); % SG, GS
 ylag2 = Z(:,2); % GG
 ylag3 = Z(:,3); % CS
-ylag4 = Z(:,4); % SC
+% ylag4 = Z(:,4); % SC
 ylag5 = Z(:,5); % CC
 ylag6 = Z(:,6); % STN -> L delay
 ylag7 = Z(:,7); % L -> Ctx E delay
@@ -68,6 +68,8 @@ Bs = 10; % STN baseline firing rate
 Bg = 20; % GPe baseline firing rate
 Bl = 20; % Long loop baseline firing rate
 
+disp(Z);
+
 v = zeros(4,1);
 
     %inS = wcs*E(t-Tcs) - wgs*G(t-Tgs) + [0,1]*AdjSTN 
@@ -77,7 +79,7 @@ v = zeros(4,1);
     inG =  var(2)*ylag1(1)-var(3)*ylag2(2) - str; 
     
     %inE =  - wsc*S(t-Tsc) - wcc*I(t-Tcc) + C - [0,1]*AdjC 
-    inE =   - var(7)*ylag4(1) - var(8)*ylag5(4) + C - flagC*AdjC;
+    inE =   - var(16)*ylag7(1) - var(8)*ylag5(4) + C - flagC*AdjC;
     
     %inI = wcc*E(t-Tcc)
     inI =  var(8)*ylag5(3);

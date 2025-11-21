@@ -36,7 +36,7 @@ function  v = model_eqs(~, y, Z, var, flagSTN, flagC, AdjSTN, AdjC)
 %  AdjC     - Adjusted C after blocking wsc
 
 %  OUTPUT:
-%  v - vector representing [S(t+dt), G(t+dt), E(t+dt), I(t+dt)]
+%  v - vector representing [S(t+dt), G(t+dt), E(t+dt), I(t+dt), Str(t+dt)]
 
 % time delays
 ylag1 = Z(:,1); % SG, GS

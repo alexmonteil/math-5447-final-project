@@ -1,12 +1,12 @@
 function main
 
 % for more information see readme.txt
-addpath('C:\Users\monte427\Documents\git\math-5447-final-project\dynamic_striatum_model');
+addpath('C:\Users\monte427\Documents\git\math-5447-final-project\long_feedback_loop_model');
 
 % load data
 var = load('weights.mat');
 
-% adding additional variables for striatum extension
+% adding additional variables for long feedback loop extension
 wlc = [12; 12];
 wsl = [13; 13];
 Tlc = [14; 14];

@@ -1,0 +1,12 @@
+# MATLAB Autosave files
+*.asv
+
+# MATLAB Generated files
+*.mex*
+*.slx.r20*
+*.oa
+
+# Slang generated code
+slprj/
+sfprj/
+rtwprj/

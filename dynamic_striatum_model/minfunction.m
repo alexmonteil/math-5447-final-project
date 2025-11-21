@@ -39,12 +39,12 @@ totaltime = 1;
 tspan = [0,totaltime];
 history = [0.1, 0.1, 0.1, 0.1, 0.1];
 
-Tcc = var(9)/1000; %rescale variable
-Tstrg = var(18); % Striatum to GPe delay
-Tcstr = var(19); % Cortex to Striatum delay
+Tcc = var(9)/1000; % rescale variable
+Tstrg = var(18)/1000; % Striatum to GPe delay rescaled
+Tcstr = var(19)/1000; % Cortex to Striatum delay rescaled
 
-   %lag = [(Tsg,Tgs),Tgg   , Tcs      , Tsc       , Tcc, Tstrg, Tcstr]
-    lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tstrg, Tcstr];
+%lag = [(Tsg,Tgs),Tgg   , Tcs      , Tsc       , Tcc, Tstrg, Tcstr]
+lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tstrg, Tcstr];
 
 WEIGHT_OF_FREQ = 20;    %This value was used in most model fittings. Only while creating file fullmodel_weakerlongloop_longdelays the value of 20 was used.
 NumCond = 6;   % number of model conditions

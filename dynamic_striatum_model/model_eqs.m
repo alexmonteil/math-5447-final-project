@@ -48,15 +48,15 @@ ylag6 = Z(:,6); % Str-> GPe delay
 ylag7 = Z(:,7); % Ctx-> Str delay
 
 % rescaled free parameters 
-taue = var(10)/1000;
-taui = var(11)/1000;
+taue = var(10)/1000; % Ctx E time constant
+taui = var(11)/1000; % Ctx I time constant
 C = var(4)*10;
 % str = var(5)*10;
-Be = var(12);
-Bi = var(13);
-Me = var(14)*10;
-Mi = var(15)*10;
-
+Be = var(12); % Ctx E baseline firing rate
+Bi = var(13); % Ctx I baseline firing rate
+Me = var(14)*10; % Ctx E Max firing rate
+Mi = var(15)*10; % Ctx I Max firing rate
+ 
 % additional fixed parameters
 taus = 12.8*10^-3; % STN time constant
 taug = 20*10^-3; % GPe time constant

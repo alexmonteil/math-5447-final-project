@@ -1,9 +1,17 @@
 function main
 
 % for more information see readme.txt
+addpath('C:\Users\monte427\Documents\git\math-5447-final-project\dynamic_striatum_model');
 
 % load data
 var = load('weights.mat');
+
+% adding additional variables for striatum extension
+wlc = [12; 12];
+wsl = [13; 13];
+Tlc = [14; 14];
+Tsl = [15; 15];
+var.weights = [var.weights, wlc, wsl, Tlc, Tsl];
 
 [~, Features_opt] = minfunction(var.weights(1,:));
 generate_fig(Features_opt, 1)

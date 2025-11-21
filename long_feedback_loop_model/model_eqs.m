@@ -17,8 +17,12 @@ function  v = model_eqs(~, y, Z, var, flagSTN, flagC, AdjSTN, AdjC)
 %  str=var(5)
 %  wcs=var(6)
 %  wsc=var(7)
-%  wc=var(8)
-%  Tc=var(9)
+%  wcc=var(8)
+%  wlc=var(16)
+%  wsl=var(17)
+%  Tcc=var(9)
+%  Tlc=var(18)
+%  Tsl=var(19)
 %  taue = var(10)
 %  taui = var(11)
 %  Be = var(12)
@@ -35,29 +39,34 @@ function  v = model_eqs(~, y, Z, var, flagSTN, flagC, AdjSTN, AdjC)
 %  v - vector representing [S(t+dt), G(t+dt), E(t+dt), I(t+dt)]
 
 % time delays
-ylag1 = Z(:,1);
-ylag2 = Z(:,2);
-ylag3 = Z(:,3);
-ylag4 = Z(:,4);
-ylag5 = Z(:,5);
+ylag1 = Z(:,1); % SG, GS
+ylag2 = Z(:,2); % GG
+ylag3 = Z(:,3); % CS
+ylag4 = Z(:,4); % SC
+ylag5 = Z(:,5); % CC
+ylag6 = Z(:,6); % STN -> L delay
+ylag7 = Z(:,7); % L -> Ctx E delay
 
 % rescaled free parameters 
-taue = var(10)/1000;
-taui = var(11)/1000;
+taue = var(10)/1000; % Ctx E time constant
+taui = var(11)/1000; % Ctx I time constant
 C = var(4)*10;
 str = var(5)*10;
-Be = var(12);
-Bi = var(13);
-Me = var(14)*10;
-Mi = var(15)*10;
-
+Be = var(12); % Ctx E baseline firing rate
+Bi = var(13); % Ctx I baseline firing rate
+Me = var(14)*10; % Ctx E Max firing rate
+Mi = var(15)*10; % Ctx I Max firing rate
+ 
 % additional fixed parameters
-taus = 12.8*10^-3;
-taug = 20*10^-3; 
-Ms=300;
-Mg = 400;
-Bs = 10;
-Bg = 20;
+taus = 12.8*10^-3; % STN time constant
+taug = 20*10^-3; % GPe time constant
+taul = 20*10^-3; % Long loop time constant
+Ms=300; % STN Max firing rate
+Mg = 400; % GPe Max firing rate
+Ml = 400; % Long loop Max firing rate
+Bs = 10; % STN baseline firing rate
+Bg = 20; % GPe baseline firing rate
+Bl = 20; % Long loop baseline firing rate
 
 v = zeros(4,1);
 
@@ -72,13 +81,19 @@ v = zeros(4,1);
     
     %inI = wcc*E(t-Tcc)
     inI =  var(8)*ylag5(3);
+
+    % inL = wsl*S(t - Tsl)
+    inL = var(17)*ylag6(1);
     
-v(1)= ((Ms/((1+exp(-4*inS/Ms)*((Ms-Bs)/Bs)))) - y(1))*(1/taus);
+    
+v(1)= ((Ms/((1+exp(-4*inS/Ms)*((Ms-Bs)/Bs)))) - y(1))*(1/taus); % STN
 
-v(2)= ((Mg/((1+exp(-4*inG/Mg)*((Mg-Bg)/Bg)))) - y(2))*(1/taug);
+v(2)= ((Mg/((1+exp(-4*inG/Mg)*((Mg-Bg)/Bg)))) - y(2))*(1/taug); % GPe
 
-v(3)= ((Me/((1+exp(-4*inE/Me)*((Me-Be)/Be)))) - y(3))*(1/taue);
+v(3)= ((Me/((1+exp(-4*inE/Me)*((Me-Be)/Be)))) - y(3))*(1/taue); % Ctx E
 
-v(4)= ((Mi/((1+exp(-4*inI/Mi)*((Mi-Bi)/Bi)))) - y(4))*(1/taui);
+v(4)= ((Mi/((1+exp(-4*inI/Mi)*((Mi-Bi)/Bi)))) - y(4))*(1/taui); % Ctx I
+
+v(5)= ((Ml/((1+exp(-4*inL/Ml)*((Ml-Bl)/Bl)))) - y(5))*(1/taul); % Long loop
 
 end 

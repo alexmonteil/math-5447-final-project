@@ -12,8 +12,12 @@ function [k, Features_opt, time_info, WEIGHT_OF_FREQ] = minfunction(var)
 % str=var(5)
 % wcs=var(6)
 % wsc=var(7)
-% wc=var(8)
-% Tc=var(9)
+% wcc=var(8)
+% wlc=var(16)
+% wsl=var(17)
+% Tcc=var(9)
+% Tlc=var(18)
+% Tsl=var(19)
 % taue = var(10)
 % taui = var(11)
 % Be = var(12)
@@ -33,12 +37,14 @@ if var(:) >= 0
 % time_info   
 totaltime = 1;
 tspan = [0,totaltime];
-history = [0.1, 0.1, 0.1, 0.1];
+history = [0.1, 0.1, 0.1, 0.1, 0.1];
 
-Tcc = var(9)/1000; %rescale variable
+Tcc = var(9)/1000; % rescale variable
+Tlc = var(18)/1000;
+Tsl = var(19)/1000;
 
-   %lag = [(Tsg,Tgs),Tgg   , Tcs      , Tsc       , Tcc]
-    lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc];
+%lag = [(Tsg,Tgs),Tgg   , Tcs      , Tsc       , Tcc, Tlc, Tsl]
+lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tlc, Tsl];
 
 WEIGHT_OF_FREQ = 20;    %This value was used in most model fittings. Only while creating file fullmodel_weakerlongloop_longdelays the value of 20 was used.
 NumCond = 6;   % number of model conditions

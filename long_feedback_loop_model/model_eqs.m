@@ -78,14 +78,14 @@ v = zeros(4,1);
     %inG = wsg*S(t-Tsg) - wgg*G(t-Tgg) - str
     inG =  var(2)*ylag1(1)-var(3)*ylag2(2) - str; 
     
-    %inE =  - wsc*S(t-Tsc) - wcc*I(t-Tcc) + C - [0,1]*AdjC 
-    inE =   - var(16)*ylag7(1) - var(8)*ylag5(4) + C - flagC*AdjC;
+    %inE =  - wlc*L(t-Tlc) - wcc*I(t - Tcc) + C - [0,1]*AdjC 
+    inE =   - var(16)*ylag6(5) - var(8)*ylag5(4) + C - flagC*AdjC;
     
     %inI = wcc*E(t-Tcc)
     inI =  var(8)*ylag5(3);
 
     % inL = wsl*S(t - Tsl)
-    inL = var(17)*ylag6(1);
+    inL = var(17)*ylag7(1);
     
     
 v(1)= ((Ms/((1+exp(-4*inS/Ms)*((Ms-Bs)/Bs)))) - y(1))*(1/taus); % STN

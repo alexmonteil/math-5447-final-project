@@ -104,18 +104,20 @@ if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
 end
 if plot_flag == 1;
-h_legend = legend('STN','GP', 'E', 'I');
+h_legend = legend('STN','GP', 'E', 'I', 'L');
 set(h_legend,'FontSize',fontsize);
 end
 
 % Headers for set of subplots
 if plot_flag == 1;
-    descr = {'Resonance Model'};
+    % Note: now both sets of parameters represent a feedback model
+    descr = {'Parameter set 1 (Resonance-derived)'};
     ax = gca;
     axes(ax) 
     text(0.3,250,descr,'fontsize',10);
 elseif plot_flag == 2;
-    descr = {'Feedback Model'};
+    % Note: now both sets of parameters represent a feedback model
+    descr = {'Parameter set 2 (Feedback-derived)'};
     ax = gca;
     axes(ax) 
     text(0.3,370,descr,'fontsize',10);

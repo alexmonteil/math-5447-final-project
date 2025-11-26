@@ -68,8 +68,6 @@ Bs = 10; % STN baseline firing rate
 Bg = 20; % GPe baseline firing rate
 Bl = 20; % Long loop baseline firing rate
 
-disp(Z);
-
 v = zeros(4,1);
 
     %inS = wcs*E(t-Tcs) - wgs*G(t-Tgs) + [0,1]*AdjSTN 

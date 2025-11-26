@@ -26,33 +26,35 @@ maxGPe  = cell2mat(Features_opt(6));
 freq    = cell2mat(Features_opt(7)); 
 x1      = cell2mat(Features_opt(8));  %STN firing rate of intact model
 y1      = cell2mat(Features_opt(9));  %GPe firing rate of intact model
-x2      = cell2mat(Features_opt(10)); %STN firing rate of model with wgs =0
+x2      = cell2mat(Features_opt(10)); %STN firing rate of model with wgs = 0
 y2      = cell2mat(Features_opt(11)); %GPe firing rate of modelwith wgs = 0
 x3      = cell2mat(Features_opt(12)); %STN firing rate of model with wsg = 0
 y3      = cell2mat(Features_opt(13)); %GPe firing rate of model with wsg = 0
 x4      = cell2mat(Features_opt(14)); %STN firing rate of model with wcs = 0
 y4      = cell2mat(Features_opt(15)); %GPe firing rate of model with wcs = 0
-x5      = cell2mat(Features_opt(18)); %str = 0
-y5      = cell2mat(Features_opt(19)); %str = 0
-x6      = cell2mat(Features_opt(16)); %STN firing rate of model with wsc = 0
-y6      = cell2mat(Features_opt(17)); %GPe firing rate of model with wsc = 0
+x5      = cell2mat(Features_opt(18)); %STN firing rate of model with wsl = 0
+y5      = cell2mat(Features_opt(19)); %GPe firing rate of model with wsl = 0
+x6      = cell2mat(Features_opt(16)); %STN firing rate of model with str = 0
+y6      = cell2mat(Features_opt(17)); %GPe firing rate of model with str = 0
+x7      = cell2mat(Features_opt(20)); %STN firing rate of model with wlc = 0
+y7      = cell2mat(Features_opt(21)); %GPe firing rate of model with wlc = 0
 
-
-%% 
+%% Plot Setup
     % firing rates of single neurons
-    experimental = [5, 65, 125, 45, 100, 155, 14];  
+    experimental = [5, 65, 125, 45, 100, 155, 14];
     simulation = [minSTN, meanSTN, maxSTN, minGPe, meanGPe, maxGPe, freq];
     
 if plot_flag == 1;    
     hFig = figure;
-    set(hFig, 'Position', [0 0 700 1000])   
-    plot_flag_vec = [1,3,5,7,9,11,13];
+    set(hFig, 'Position', [0 0 700 1200])   
+    plot_flag_vec = [1,3,5,7,9,11,13,15];
 elseif plot_flag == 2; 
-    plot_flag_vec = [2,4,6,8,10,12,14];
+    plot_flag_vec = [2,4,6,8,10,12,14,16];
     hold on;
 end
 
-subplot(7,2, plot_flag_vec(7))
+% 1. SUMMARY STATS PLOT (Placed at the bottom row, index 8)
+subplot(8,2, plot_flag_vec(8))
 plot(experimental, 'x',...
     'LineStyle','none',...
     'LineWidth', 2, ...
@@ -76,7 +78,7 @@ set(gca, ...
     'FontSize'    , fontsize                         );
 
 hold on;
-subplot(7,2,plot_flag_vec(7))
+subplot(8,2,plot_flag_vec(8))
 plot(simulation,'o',...
     'LineStyle','none',...
     'MarkerSize',5,...
@@ -95,9 +97,8 @@ ylabel({'Firing rate (spk/s) or' ;'oscillation frequency (Hz)'},'fontsize',fonts
 hold off
 end
 
-%% 
-
-subplot(7,2,plot_flag_vec(1))
+% 2. INTACT MODEL
+subplot(8,2,plot_flag_vec(1))
 plot(x1,y1)
 
 if plot_flag == 1;
@@ -132,8 +133,8 @@ axes(ax)
 h = text(annotation_horz_pos,annotation_vert_pos,descr,'fontsize',annotate_fontsize);
 set(h, 'rotation', 90)
 
-%% 
-subplot(7,2,plot_flag_vec(2))
+% 3. WGS = 0 MODEL
+subplot(8,2,plot_flag_vec(2))
 plot(x2,y2)
 if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
@@ -154,7 +155,8 @@ axes(ax)
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
 set(h, 'rotation', 90)
 
-subplot(7,2,plot_flag_vec(3))
+% 4. WSG = 0 MODEL
+subplot(8,2,plot_flag_vec(3))
 plot(x3,y3)
 if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
@@ -175,8 +177,8 @@ axes(ax)
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
 set(h, 'rotation', 90)
 
-%%
-subplot(7,2,plot_flag_vec(4))
+% 5. WCS = 0 MODEL
+subplot(8,2,plot_flag_vec(4))
 plot(x4,y4)
 if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
@@ -197,8 +199,8 @@ axes(ax)
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
 set(h, 'rotation', 90)
 
-%% 
-subplot(7,2,plot_flag_vec(5))
+% 6. WSL = 0 MODEL
+subplot(8,2,plot_flag_vec(5))
 plot(x5,y5)
 if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
@@ -219,8 +221,8 @@ axes(ax)
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
 set(h, 'rotation', 90)
 
-%% 
-subplot(7,2,plot_flag_vec(6))
+% 7. STR = 0 MODEL
+subplot(8,2,plot_flag_vec(6))
 plot(x6,y6)
 if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
@@ -251,8 +253,20 @@ axes(ax)
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
 set(h, 'rotation', 90)
 
-%% 
-save_handle = subplot(7,2,plot_flag_vec(6));
+% 8. WLC = 0 MODEL
+subplot(8,2,plot_flag_vec(7))
+plot(x7,y7)
+if plot_flag == 1; ylabel('Firing rate (spk/s)','fontsize',fontsize); end
+xlabel('Time (s)','fontsize',fontsize) % Axis label goes on the last time series
+
+set(gca, 'Units', 'Normalized', 'Box', 'on', 'TickDir', 'in', 'FontSize', labelsize);
+descr = {'w_{LC} = 0'};
+ax = gca; axes(ax); 
+h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
+set(h, 'rotation', 90)
+
+%% Save Figure
+save_handle = subplot(8,2,plot_flag_vec(7));
 saveas(save_handle, 'output_figure')
 
 end 

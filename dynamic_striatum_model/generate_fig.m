@@ -147,7 +147,7 @@ set(gca, ...
     'LineWidth'   , 1                            , ...
     'FontSize'    , labelsize                               );
 
-descr = {'W_{GS} = 0'};
+descr = {'w_{GS} = 0'};
 ax = gca;
 axes(ax) 
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
@@ -169,7 +169,7 @@ set(gca, ...
     'LineWidth'   , 1                            , ...
     'FontSize'    , labelsize                               );
 
-descr = {'W_{SG} = 0'};
+descr = {'w_{SG} = 0'};
 ax = gca;
 axes(ax) 
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
@@ -191,7 +191,7 @@ set(gca, ...
     'LineWidth'   , 1                            , ...
     'FontSize'    , labelsize                               );
 
-descr = {'W_{CS} = 0'};
+descr = {'w_{CS} = 0'};
 ax = gca;
 axes(ax) 
 h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);

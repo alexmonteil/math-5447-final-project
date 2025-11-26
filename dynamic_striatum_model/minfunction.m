@@ -213,6 +213,7 @@ for i = 1:NumCond
     end
 
     if i == 7;
+        % Model with wcstr = 0
         x7 = sol.x;
         y7 = sol.y;
     end

@@ -134,6 +134,8 @@ for i = 1:NumCond
         zeroWGS_maxSTN = max(y2(1,(round(length(y2)/2)):end));
         zeroWGS_minGP  = min(y2(2,(round(length(y2)/2)):end));
         zeroWGS_maxGP  = max(y2(2,(round(length(y2)/2)):end));
+
+        % PENALTY: Oscillations should stop.
         
         %for STN
         zeroWGS_STN = zeroWGS_maxSTN - zeroWGS_minSTN;
@@ -151,6 +153,8 @@ for i = 1:NumCond
         zeroWSG_maxSTN = max(y3(1,(round(length(y3)/2)):end));
         zeroWSG_minGP  = min(y3(2,(round(length(y3)/2)):end));
         zeroWGS_maxGP  = max(y3(2,(round(length(y3)/2)):end));
+
+        % PENALTY: Oscillations should stop.
         
         %for STN
         zeroWSG_STN = zeroWSG_maxSTN - zeroWSG_minSTN;
@@ -168,6 +172,8 @@ for i = 1:NumCond
         zeroCtxSTN_maxSTN = max(y4(1,(round(length(y4)/2)):end));
         zeroCtxSTN_minGP  = min(y4(2,(round(length(y4)/2)):end));
         zeroCtxSTN_maxGP  = max(y4(2,(round(length(y4)/2)):end));
+
+        % PENALTY: Oscillations should stop.
         
         %for STN
         zeroCtxSTN_STN  = zeroCtxSTN_maxSTN - zeroCtxSTN_minSTN;
@@ -184,31 +190,28 @@ for i = 1:NumCond
     end
     
     if i == 6;
-        % Model with str and wstrg = 0
+        % Model with wstrg = 0
         x6 = sol.x;
         y6 = sol.y;
         
-        % Note: Check if the rest of this if block still applies in terms
-        % of calculating the zeroSTR stats for the cost function
         zeroSTR_minSTN = min(y6(1,(round(length(y6)/2)):end));
         zeroSTR_maxSTN = max(y6(1,(round(length(y6)/2)):end));
         zeroSTR_minGP  = min(y6(2,(round(length(y6)/2)):end));
         zeroSTR_maxGP  = max(y6(2,(round(length(y6)/2)):end));
         
-        % After blocking striatum firing rates increase. We impose a penalty
-        % if firing rates after blocking are lower than before blocking.
+        % REVERSED PENALTY: Oscillations should persist.
                       
-            if 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN) <= 0;
-              zeroSTR_STN =  0;
-            else
-              zeroSTR_STN = 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN);
-            end
-            
-            if 110 - abs(zeroSTR_maxGP-zeroSTR_minGP) <= 0;
-               zeroSTR_GP =  0;
-            else
-               zeroSTR_GP = 110 - abs(zeroSTR_maxGP-zeroSTR_minGP);
-            end 
+        if 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN) <= 0;
+          zeroSTR_STN =  0;
+        else
+          zeroSTR_STN = 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN);
+        end
+        
+        if 110 - abs(zeroSTR_maxGP-zeroSTR_minGP) <= 0;
+           zeroSTR_GP =  0;
+        else
+           zeroSTR_GP = 110 - abs(zeroSTR_maxGP-zeroSTR_minGP);
+        end 
         
     end
 
@@ -216,6 +219,25 @@ for i = 1:NumCond
         % Model with wcstr = 0
         x7 = sol.x;
         y7 = sol.y;
+
+        zeroCStr_minSTN = min(y7(1,(round(length(y7)/2)):end));
+        zeroCStr_maxSTN = max(y7(1,(round(length(y7)/2)):end));
+        zeroCStr_minGP  = min(y7(2,(round(length(y7)/2)):end));
+        zeroCStr_maxGP  = max(y7(2,(round(length(y7)/2)):end));
+
+        % REVERSED PENALTY: Oscillations should persist
+        
+        if 120 - abs(zeroCStr_maxSTN-zeroCStr_minSTN) <= 0;
+            zeroCStr_STN =  0;
+        else
+            zeroCStr_STN = 120 - abs(zeroCStr_maxSTN-zeroCStr_minSTN);
+        end
+        
+        if 110 - abs(zeroCStr_maxGP-zeroCStr_minGP) <= 0;
+            zeroCStr_GP =  0;
+        else
+            zeroCStr_GP = 110 - abs(zeroCStr_maxGP-zeroCStr_minGP);
+        end
     end
     
     %restore var to full model
@@ -227,15 +249,24 @@ end
 
 
 %% Cost function
-    
+    % Match Tachibana full network
     condition1 = FMminSTN^2 + FMmeanSTN^2 + FMmaxSTN^2 +...
         FMminGP^2 + FMmeanGP^2 + FMmaxGP^2 + (WEIGHT_OF_FREQ*FMfreq)^2;
+
+    % Tachibana constraint: STN-GPe lesions stop oscillations
     condition2 = zeroWGS_STN^2 + zeroWGS_GP^2;
-    condition3 = zeroWSG_STN^2 + zeroWSG_GP^2;  
-    condition4 = zeroCtxSTN_STN^2 + zeroCtxSTN_GP^2;  
-    condition5 = zeroSTR_STN^2 + zeroSTR_GP^2;
+    condition3 = zeroWSG_STN^2 + zeroWSG_GP^2;
     
-    k = condition1 + condition2 + condition3 + condition4 + condition5;
+    % Tachibana constraint: Cortex-STN lesion stops oscillations
+    condition4 = zeroCtxSTN_STN^2 + zeroCtxSTN_GP^2;
+
+    % Tachibana constraint: Str-GPe lesion allows oscillations
+    condition5 = zeroSTR_STN^2 + zeroSTR_GP^2;
+
+    % Tachibana constraint: Cortex-Str lesion allows oscillations
+    condition6 = zeroCStr_STN^2 + zeroCStr_GP^2;
+    
+    k = condition1 + condition2 + condition3 + condition4 + condition5 + condition6;
     
     % return info
     Features_opt = {minSTN, meanSTN, maxSTN, minGP, meanGP, maxGP, freq...

@@ -47,7 +47,7 @@ Tcstr = var(19)/1000; % Cortex to Striatum delay rescaled
 lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tstrg, Tcstr];
 
 WEIGHT_OF_FREQ = 20;    %This value was used in most model fittings. Only while creating file fullmodel_weakerlongloop_longdelays the value of 20 was used.
-NumCond = 6;   % number of model conditions
+NumCond = 7;   % number of model conditions
 flagSTN = 0;   % when flagSTN = 1 the adjusted STN input is included in the model.
 flagC   = 0;   % when flagC = 1 the adjusted Cortical input is included in the model.
 AdjSTN  = 0;   % AdjSTN not generated on first call of model_eqs so pass 0 as augument instead.
@@ -85,8 +85,13 @@ for i = 1:NumCond
     end
     
     if i == 6;
-        % Model with str = 0
-        var(5) = 0;
+        % Model with wstrg = 0
+        var(16) = 0;
+    end
+
+    if i == 7;
+        % Model with wcstr = 0
+        var(17) = 0;
     end
     
      sol = dde23(@model_eqs,lag,history,tspan,[],var,flagSTN,flagC,AdjSTN,AdjC);
@@ -179,10 +184,12 @@ for i = 1:NumCond
     end
     
     if i == 6;
-        % Model with str = 0
+        % Model with str and wstrg = 0
         x6 = sol.x;
         y6 = sol.y;
         
+        % Note: Check if the rest of this if block still applies in terms
+        % of calculating the zeroSTR stats for the cost function
         zeroSTR_minSTN = min(y6(1,(round(length(y6)/2)):end));
         zeroSTR_maxSTN = max(y6(1,(round(length(y6)/2)):end));
         zeroSTR_minGP  = min(y6(2,(round(length(y6)/2)):end));
@@ -203,6 +210,11 @@ for i = 1:NumCond
                zeroSTR_GP = 110 - abs(zeroSTR_maxGP-zeroSTR_minGP);
             end 
         
+    end
+
+    if i == 7;
+        x7 = sol.x;
+        y7 = sol.y;
     end
     
     %restore var to full model
@@ -226,7 +238,7 @@ end
     
     % return info
     Features_opt = {minSTN, meanSTN, maxSTN, minGP, meanGP, maxGP, freq...
-        , x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6};
+        , x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7};
     
     time_info = {lag,tspan,history};
 else 

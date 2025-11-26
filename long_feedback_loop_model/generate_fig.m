@@ -84,9 +84,8 @@ plot(simulation,'o',...
     'MarkerFaceColor',[1, 0, 0])
 
 grid on
-if plot_flag == 1;
-
 h_legend = legend('experimental','simulation');
+if plot_flag == 1;
 lh=findall(gcf,'tag','legend');
 lp=get(lh,'position');
 set(lh,'position',[0.40,0.185,lp(3:4)]);
@@ -112,16 +111,10 @@ set(h_legend,'FontSize',fontsize);
 % Headers for set of subplots
 if plot_flag == 1;
     % Note: now both sets of parameters represent a feedback model
-    descr = {'Parameter set 1 (Resonance-derived)'};
-    ax = gca;
-    axes(ax) 
-    text(0.3,250,descr,'fontsize',10);
+    title('Parameter Set 1 (Resonance-derived)', 'FontSize', 10);
 elseif plot_flag == 2;
     % Note: now both sets of parameters represent a feedback model
-    descr = {'Parameter set 2 (Feedback-derived)'};
-    ax = gca;
-    axes(ax) 
-    text(0.3,370,descr,'fontsize',10);
+    title('Parameter Set 2 (Feedback-derived)', 'FontSize', 10);
 end
 
 set(gca, 'Units', 'Normalized');

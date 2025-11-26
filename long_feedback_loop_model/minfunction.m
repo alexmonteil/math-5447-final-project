@@ -79,8 +79,8 @@ for i = 1:NumCond
     end
     
     if i == 5;
-        % Model with wsc = 0
-        var(7) = 0;
+        % Model with wsl = 0
+        var(17) = 0;
         flagC = 1;
     end
     
@@ -172,7 +172,7 @@ for i = 1:NumCond
     end
     
     if i == 5;
-        % Model with wsc = 0
+        % Model with wsl = 0
         x5 = sol.x;
         y5 = sol.y;
         

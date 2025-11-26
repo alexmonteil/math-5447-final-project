@@ -103,10 +103,10 @@ plot(x1,y1)
 if plot_flag == 1;
 ylabel('Firing rate (spk/s)','fontsize',fontsize)
 end
-if plot_flag == 1;
+
+% Add legend for both parameter sets
 h_legend = legend('STN','GP', 'E', 'I', 'Str');
 set(h_legend,'FontSize',fontsize);
-end
 
 % Headers for set of subplots
 if plot_flag == 1;

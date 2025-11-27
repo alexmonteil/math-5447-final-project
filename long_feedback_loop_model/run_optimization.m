@@ -9,7 +9,7 @@ function run_optimization
 
     % Setup
     original_params = var_data.weights(2, :); 
-    new_params_guess = [12, 13, 14, 15]; 
+    new_params_guess = [25, 25, 14, 15]; 
 
     % Initial guess
     x0 = [original_params, new_params_guess];
@@ -37,7 +37,7 @@ function run_optimization
     
     options = optimoptions('simulannealbnd', ...
                            'Display', 'iter', ...
-                           'MaxTime', 90, ...
+                           'MaxTime', 180, ...
                            'InitialTemperature', 50);
                            
     [optimized_var, final_cost] = simulannealbnd(@minfunction, x0, lb, ub, options);

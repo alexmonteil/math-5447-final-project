@@ -97,7 +97,7 @@ for i = 1:NumCond
      sol = dde23(@model_eqs,lag,history,tspan,[],var,flagSTN,flagC,AdjSTN,AdjC);
      
     if i == 1;
-        
+        % Intact model
         x1 = sol.x;
         y1 = sol.y;
         
@@ -186,6 +186,18 @@ for i = 1:NumCond
         % Model with wsc = 0
         x5 = sol.x;
         y5 = sol.y;
+
+        zeroFb_minSTN = min(y5(1,(round(length(y5)/2)):end));
+        zeroFb_maxSTN = max(y5(1,(round(length(y5)/2)):end));
+        zeroFb_minGP  = min(y5(2,(round(length(y5)/2)):end));
+        zeroFb_maxGP  = max(y5(2,(round(length(y5)/2)):end));
+
+        % PENALTY: Oscillations should stop.
+        
+        %for STN
+        zeroFb_STN = zeroFb_maxSTN - zeroFb_minSTN;
+        %for GP
+        zeroFb_GP  = zeroFb_maxGP - zeroFb_minGP;
         
     end
     
@@ -260,13 +272,16 @@ end
     % Tachibana constraint: Cortex-STN lesion stops oscillations
     condition4 = zeroCtxSTN_STN^2 + zeroCtxSTN_GP^2;
 
+    % Tachibana constraint: STN-Cortex lesion stops oscillations
+    condition5 = zeroFb_STN^2 + zeroFb_GP^2;
+
     % Tachibana constraint: Str-GPe lesion allows oscillations
-    condition5 = zeroSTR_STN^2 + zeroSTR_GP^2;
+    condition6 = zeroSTR_STN^2 + zeroSTR_GP^2;
 
     % Tachibana constraint: Cortex-Str lesion allows oscillations
-    condition6 = zeroCStr_STN^2 + zeroCStr_GP^2;
+    condition7 = zeroCStr_STN^2 + zeroCStr_GP^2;
     
-    k = condition1 + condition2 + condition3 + condition4 + condition5 + condition6;
+    k = condition1 + condition2 + condition3 + condition4 + condition5 + condition6 + condition7;
     
     % return info
     Features_opt = {minSTN, meanSTN, maxSTN, minGP, meanGP, maxGP, freq...

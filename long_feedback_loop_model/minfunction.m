@@ -32,20 +32,6 @@ function [k, Features_opt, time_info, WEIGHT_OF_FREQ] = minfunction(var)
 % time_info    - An optional call that contains information about time
 %                delays, history, and tspan
 
-% =========================================================================
-% CONFIGURATION FLAG
-% =========================================================================
-% Set to 0 for "Agnostic" Approach:
-%   - Optimization ignores the effect of cutting the Long Loop.
-%   - Allows finding both Resonance (Cortex-driven) and Feedback solutions.
-%
-% Set to 1 for "Strict" Approach:
-%   - Optimization PENALIZES the model if oscillations persist when the 
-%     Long Loop is cut (Conditions 5 & 7).
-%   - This forces the optimizer to find ONLY Feedback-driven solutions.
-STRICT_FEEDBACK_CONSTRAINT = 1; 
-% =========================================================================
-
 if var(:) >= 0
     
 % time_info   
@@ -112,7 +98,7 @@ for i = 1:NumCond
      sol = dde23(@model_eqs,lag,history,tspan,[],var,flagSTN,flagC,AdjSTN,AdjC);
      
     if i == 1;
-        
+        % Intact model
         x1 = sol.x;
         y1 = sol.y;
         
@@ -243,6 +229,7 @@ for i = 1:NumCond
     end
 
     if i == 7;
+        % Model with wlc = 0
         x7 = sol.x;
         y7 = sol.y;
 
@@ -279,20 +266,15 @@ end
 
     % Tachibana constraint: Cortex-STN lesion stops oscillations
     condition4 = zeroCtxSTN_STN^2 + zeroCtxSTN_GP^2;
+    
+    % Tachibana constraint: STN-L lesion stops oscillations
+    condition5 = zeroSL_STN^2 + zeroSL_GP^2;
 
     % Tachibana constraint: Str-GPe lesion allows oscillations
     condition6 = zeroSTR_STN^2 + zeroSTR_GP^2;
-
-    % Long Loop Constraints (Conditional check function definition comments)
-    if STRICT_FEEDBACK_CONSTRAINT
-        % Strict Mode: Cutting the loop MUST stop oscillations.
-        condition5 = zeroSL_STN^2 + zeroSL_GP^2;
-        condition7 = zeroLC_STN^2 + zeroLC_GP^2;
-    else
-        % Agnostic Mode: No penalty for oscillations persisting.
-        condition5 = 0;
-        condition7 = 0;
-    end
+    
+    % Tachibana constraint: L-Cortex lesion stops oscillations
+    condition7 = zeroLC_STN^2 + zeroLC_GP^2;
     
     k = condition1 + condition2 + condition3 + condition4 + condition5 + condition6 + condition7;
     

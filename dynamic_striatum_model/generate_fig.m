@@ -264,7 +264,13 @@ h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fon
 set(h, 'rotation', 90)
 
 %% Save Figure 
-save_handle = subplot(8,2,plot_flag_vec(7));
-saveas(save_handle, 'output_figure')
+
+% Get the directory where this specific script (generate_fig.m) is located
+script_folder = fileparts(mfilename('fullpath'));
+
+% Construct the full path to save 'output_figure.fig' in that folder
+output_path = fullfile(script_folder, 'output_figure');
+
+saveas(gcf, output_path);
 
 end 

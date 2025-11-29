@@ -30,7 +30,7 @@ hFig = figure;
 set(hFig, 'Position', [0 0 600 1000]);
 
 % 1. Intact
-subplot(8,1,1); 
+subplot(4,2,1); 
     plot(x1,y1); 
     title('Intact Long Loop Model', 'FontSize', fontsize); 
     legend({'STN','GPe','E','I','L'}, 'FontSize', fontsize, 'Location', 'Best'); 
@@ -39,49 +39,49 @@ subplot(8,1,1);
     set(gca, 'FontSize', fontsize);
 
 % 2. WGS = 0
-subplot(8,1,2); 
+subplot(4,2,2); 
     plot(x2,y2); 
     title('w_{GS} = 0', 'FontSize', fontsize); 
     axis([0 1 0 400]);
     set(gca, 'FontSize', fontsize);
 
 % 3. WSG = 0
-subplot(8,1,3); 
+subplot(4,2,3); 
     plot(x3,y3); 
     title('w_{SG} = 0', 'FontSize', fontsize); 
     axis([0 1 0 400]);
     set(gca, 'FontSize', fontsize);
 
 % 4. WCS = 0
-subplot(8,1,4); 
+subplot(4,2,4); 
     plot(x4,y4); 
     title('w_{CS} = 0', 'FontSize', fontsize); 
     axis([0 1 0 400]);
     set(gca, 'FontSize', fontsize);
 
 % 5. WSL = 0 (Long Loop Cut 1)
-subplot(8,1,5); 
+subplot(4,2,5); 
     plot(x5,y5); 
     title('w_{SL} = 0', 'FontSize', fontsize); 
     axis([0 1 0 400]);
     set(gca, 'FontSize', fontsize);
 
 % 6. WLC = 0 (Long Loop Cut 2)
-subplot(8,1,6); 
+subplot(4,2,6); 
     plot(x7,y7); 
     title('w_{LC} = 0', 'FontSize', fontsize); 
     axis([0 1 0 400]);
     set(gca, 'FontSize', fontsize);
 
 % 7. STR = 0 (Constant Input)
-subplot(8,1,7); 
+subplot(4,2,7); 
     plot(x6,y6); 
     title('Str = 0', 'FontSize', fontsize); 
     axis([0 1 0 400]);
     set(gca, 'FontSize', fontsize);
 
 % 8. STATS
-subplot(8,1,8)
+subplot(4,2,8)
 hold on
 experimental = [5, 65, 125, 45, 100, 155, 14];
 simulation = [minSTN, meanSTN, maxSTN, minGP, meanGP, maxGP, freq];

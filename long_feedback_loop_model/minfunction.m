@@ -47,7 +47,7 @@ Tsl = var(19)/1000; % STN to long loop I delay rescaled
 lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tlc, Tsl];
 
 WEIGHT_OF_FREQ = 20;    %This value was used in most model fittings. Only while creating file fullmodel_weakerlongloop_longdelays the value of 20 was used.
-NumCond = 6;   % number of model conditions
+NumCond = 7;   % number of model conditions
 flagSTN = 0;   % when flagSTN = 1 the adjusted STN input is included in the model.
 flagC   = 0;   % when flagC = 1 the adjusted Cortical input is included in the model.
 AdjSTN  = 0;   % AdjSTN not generated on first call of model_eqs so pass 0 as augument instead.
@@ -79,20 +79,26 @@ for i = 1:NumCond
     end
     
     if i == 5;
-        % Model with wsc = 0
-        var(7) = 0;
-        flagC = 1;
+        % Model with wsl = 0
+        var(17) = 0;
+        % Note: uncomment if we want to compensate for lost input
+        % flagC = 1;
     end
     
     if i == 6;
         % Model with str = 0
         var(5) = 0;
     end
+
+    if i == 7;
+        % Model with wlc = 0
+        var(16) = 0;
+    end
     
      sol = dde23(@model_eqs,lag,history,tspan,[],var,flagSTN,flagC,AdjSTN,AdjC);
      
     if i == 1;
-        
+        % Intact model
         x1 = sol.x;
         y1 = sol.y;
         
@@ -129,6 +135,8 @@ for i = 1:NumCond
         zeroWGS_maxSTN = max(y2(1,(round(length(y2)/2)):end));
         zeroWGS_minGP  = min(y2(2,(round(length(y2)/2)):end));
         zeroWGS_maxGP  = max(y2(2,(round(length(y2)/2)):end));
+
+        % PENALTY: Oscillations should stop.
         
         %for STN
         zeroWGS_STN = zeroWGS_maxSTN - zeroWGS_minSTN;
@@ -146,6 +154,8 @@ for i = 1:NumCond
         zeroWSG_maxSTN = max(y3(1,(round(length(y3)/2)):end));
         zeroWSG_minGP  = min(y3(2,(round(length(y3)/2)):end));
         zeroWGS_maxGP  = max(y3(2,(round(length(y3)/2)):end));
+
+        % PENALTY: Oscillations should stop.
         
         %for STN
         zeroWSG_STN = zeroWSG_maxSTN - zeroWSG_minSTN;
@@ -163,6 +173,8 @@ for i = 1:NumCond
         zeroCtxSTN_maxSTN = max(y4(1,(round(length(y4)/2)):end));
         zeroCtxSTN_minGP  = min(y4(2,(round(length(y4)/2)):end));
         zeroCtxSTN_maxGP  = max(y4(2,(round(length(y4)/2)):end));
+
+        % PENALTY: Oscillations should stop.
         
         %for STN
         zeroCtxSTN_STN  = zeroCtxSTN_maxSTN - zeroCtxSTN_minSTN;
@@ -172,9 +184,21 @@ for i = 1:NumCond
     end
     
     if i == 5;
-        % Model with wsc = 0
+        % Model with wsl = 0
         x5 = sol.x;
         y5 = sol.y;
+
+        zeroSL_minSTN = min(y5(1,(round(length(y5)/2)):end));
+        zeroSL_maxSTN = max(y5(1,(round(length(y5)/2)):end));
+        zeroSL_minGP  = min(y5(2,(round(length(y5)/2)):end));
+        zeroSL_maxGP  = max(y5(2,(round(length(y5)/2)):end));
+
+        % PENALTY: Oscillations should stop.
+        
+        %for STN
+        zeroSL_STN = zeroSL_maxSTN - zeroSL_minSTN;
+        %for GP
+        zeroSL_GP  = zeroSL_maxGP - zeroSL_minGP;
         
     end
     
@@ -188,21 +212,38 @@ for i = 1:NumCond
         zeroSTR_minGP  = min(y6(2,(round(length(y6)/2)):end));
         zeroSTR_maxGP  = max(y6(2,(round(length(y6)/2)):end));
         
-        % After blocking striatum firing rates increase. We impose a penalty
-        % if firing rates after blocking are lower than before blocking.
+        % REVERSED PENALTY: Oscillations should persist.
                       
-            if 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN) <= 0;
-              zeroSTR_STN =  0;
-            else
-              zeroSTR_STN = 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN);
-            end
-            
-            if 110 - abs(zeroSTR_maxGP-zeroSTR_minGP) <= 0;
-               zeroSTR_GP =  0;
-            else
-               zeroSTR_GP = 110 - abs(zeroSTR_maxGP-zeroSTR_minGP);
-            end 
+        if 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN) <= 0;
+          zeroSTR_STN =  0;
+        else
+          zeroSTR_STN = 120 - abs(zeroSTR_maxSTN-zeroSTR_minSTN);
+        end
         
+        if 110 - abs(zeroSTR_maxGP-zeroSTR_minGP) <= 0;
+           zeroSTR_GP =  0;
+        else
+           zeroSTR_GP = 110 - abs(zeroSTR_maxGP-zeroSTR_minGP);
+        end 
+        
+    end
+
+    if i == 7;
+        % Model with wlc = 0
+        x7 = sol.x;
+        y7 = sol.y;
+
+        zeroLC_minSTN = min(y7(1,(round(length(y7)/2)):end));
+        zeroLC_maxSTN = max(y7(1,(round(length(y7)/2)):end));
+        zeroLC_minGP  = min(y7(2,(round(length(y7)/2)):end));
+        zeroLC_maxGP  = max(y7(2,(round(length(y7)/2)):end));
+
+        % PENALTY: Oscillations should stop.
+        
+        %for STN
+        zeroLC_STN = zeroLC_maxSTN - zeroLC_minSTN;
+        %for GP
+        zeroLC_GP  = zeroLC_maxGP - zeroLC_minGP;
     end
     
     %restore var to full model
@@ -215,18 +256,31 @@ end
 
 %% Cost function
     
+    % Match Tachibana full network
     condition1 = FMminSTN^2 + FMmeanSTN^2 + FMmaxSTN^2 +...
         FMminGP^2 + FMmeanGP^2 + FMmaxGP^2 + (WEIGHT_OF_FREQ*FMfreq)^2;
+
+    % Tachibana constraint: STN-GPe lesions stop oscillations
     condition2 = zeroWGS_STN^2 + zeroWGS_GP^2;
-    condition3 = zeroWSG_STN^2 + zeroWSG_GP^2;  
-    condition4 = zeroCtxSTN_STN^2 + zeroCtxSTN_GP^2;  
-    condition5 = zeroSTR_STN^2 + zeroSTR_GP^2;
+    condition3 = zeroWSG_STN^2 + zeroWSG_GP^2;
+
+    % Tachibana constraint: Cortex-STN lesion stops oscillations
+    condition4 = zeroCtxSTN_STN^2 + zeroCtxSTN_GP^2;
     
-    k = condition1 + condition2 + condition3 + condition4 + condition5;
+    % Tachibana constraint: STN-L lesion stops oscillations
+    condition5 = zeroSL_STN^2 + zeroSL_GP^2;
+
+    % Tachibana constraint: Str-GPe lesion allows oscillations
+    condition6 = zeroSTR_STN^2 + zeroSTR_GP^2;
+    
+    % Tachibana constraint: L-Cortex lesion stops oscillations
+    condition7 = zeroLC_STN^2 + zeroLC_GP^2;
+    
+    k = condition1 + condition2 + condition3 + condition4 + condition5 + condition6 + condition7;
     
     % return info
     Features_opt = {minSTN, meanSTN, maxSTN, minGP, meanGP, maxGP, freq...
-        , x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6};
+        , x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7};
     
     time_info = {lag,tspan,history};
 else 

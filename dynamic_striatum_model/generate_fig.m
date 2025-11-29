@@ -1,262 +1,103 @@
-function generate_fig(Features_opt, plot_flag)
+function generate_fig(Features_opt)
+% generate_fig(Features_opt) - Plots results for the Feedback Model
 
-% function plotting(Features_opt, data_type)
-% This contains functions for plotting output from model
-% INPUTS
-% Features_opt - A vector of features (firing rates and frequency)
-%                obtained from the model.
-% plot_flag    - If plot_flag = 1 then it plots figures from 
-%                full_long_weight20_pooled.mat. If plot_flag = 2 then it
-%                plots figures from zerowsc_long_weight20_pooled.mat. 
+fontsize = 8;
 
-% Set plot layout parameters
-fontsize = 5;
-labelsize = 6;
-annotation_horz_pos = -1.6;
-annotation_vert_pos = 0.5;
-annotate_fontsize = 8;
-
-% extract variables
+% Extract data
 minSTN  = cell2mat(Features_opt(1));
 meanSTN = cell2mat(Features_opt(2));
 maxSTN  = cell2mat(Features_opt(3));
-minGPe  = cell2mat(Features_opt(4));
-meanGPe = cell2mat(Features_opt(5));
-maxGPe  = cell2mat(Features_opt(6)); 
+minGP   = cell2mat(Features_opt(4));
+meanGP  = cell2mat(Features_opt(5));
+maxGP   = cell2mat(Features_opt(6)); 
 freq    = cell2mat(Features_opt(7)); 
-x1      = cell2mat(Features_opt(8));  %STN firing rate of intact model
-y1      = cell2mat(Features_opt(9));  %GPe firing rate of intact model
-x2      = cell2mat(Features_opt(10)); %STN firing rate of model with wgs =0
-y2      = cell2mat(Features_opt(11)); %GPe firing rate of modelwith wgs = 0
-x3      = cell2mat(Features_opt(12)); %STN firing rate of model with wsg = 0
-y3      = cell2mat(Features_opt(13)); %GPe firing rate of model with wsg = 0
-x4      = cell2mat(Features_opt(14)); %STN firing rate of model with wcs = 0
-y4      = cell2mat(Features_opt(15)); %GPe firing rate of model with wcs = 0
-x5      = cell2mat(Features_opt(18)); %str = 0
-y5      = cell2mat(Features_opt(19)); %str = 0
-x6      = cell2mat(Features_opt(16)); %STN firing rate of model with wsc = 0
-y6      = cell2mat(Features_opt(17)); %GPe firing rate of model with wsc = 0
 
+x1      = cell2mat(Features_opt(8));  % Intact
+y1      = cell2mat(Features_opt(9));
+x2      = cell2mat(Features_opt(10)); % wgs=0
+y2      = cell2mat(Features_opt(11));
+x3      = cell2mat(Features_opt(12)); % wsg=0
+y3      = cell2mat(Features_opt(13));
+x4      = cell2mat(Features_opt(14)); % wcs=0
+y4      = cell2mat(Features_opt(15));
+x5      = cell2mat(Features_opt(16)); % wsc=0
+y5      = cell2mat(Features_opt(17));
+x6      = cell2mat(Features_opt(18)); % wstrg=0
+y6      = cell2mat(Features_opt(19));
+x7      = cell2mat(Features_opt(20)); % wcstr=0
+y7      = cell2mat(Features_opt(21));
 
-%% 
-    % firing rates of single neurons
-    experimental = [5, 65, 125, 45, 100, 155, 14];  
-    simulation = [minSTN, meanSTN, maxSTN, minGPe, meanGPe, maxGPe, freq];
-    
-if plot_flag == 1;    
-    hFig = figure;
-    set(hFig, 'Position', [0 0 700 1000])   
-    plot_flag_vec = [1,3,5,7,9,11,13];
-elseif plot_flag == 2; 
-    plot_flag_vec = [2,4,6,8,10,12,14];
-    hold on;
-end
+hFig = figure;
+set(hFig, 'Position', [0 0 600 1000]);
 
-subplot(7,2, plot_flag_vec(7))
-plot(experimental, 'x',...
-    'LineStyle','none',...
-    'LineWidth', 2, ...
-    'MarkerSize',6,...
-    'MarkerEdgeColor','b',...
-    'MarkerFaceColor',[0, 0, 1])
+% 1. Intact
+subplot(4,2,1); 
+plot(x1,y1); 
+title('Intact Dynamic Striatum Model', 'FontSize', fontsize); 
+legend({'STN','GPe','E','I','Str'}, 'FontSize', fontsize, 'Location', 'Best'); 
+ylabel('FR (spk/s)', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
 
-set(gca, 'Units', 'Normalized');
-Labels = {'minSTN','meanSTN','maxSTN','minGPe','meanGPe','maxGPe','freq'};
-xticks = 1:7; 
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'XMinorTick'  , 'off'                        , ...
-    'YMinorTick'  , 'off'                        , ...
-    'XTick'       , xticks                       , ...
-    'XTickLabel'  , Labels                       , ...
-    'FontSize'    , fontsize                         );
+% 2. WGS = 0
+subplot(4,2,2); 
+plot(x2,y2); 
+title('w_{GS} = 0', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
 
-hold on;
-subplot(7,2,plot_flag_vec(7))
-plot(simulation,'o',...
-    'LineStyle','none',...
-    'MarkerSize',5,...
-    'MarkerEdgeColor','b',...
-    'MarkerFaceColor',[1, 0, 0])
+% 3. WSG = 0
+subplot(4,2,3); 
+plot(x3,y3); 
+title('w_{SG} = 0', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
 
+% 4. WCS = 0
+subplot(4,2,4); 
+plot(x4,y4); 
+title('w_{CS} = 0', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
+
+% 5. WSC = 0 (Feedback)
+subplot(4,2,5); 
+plot(x5,y5); 
+title('w_{SC} = 0', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
+
+% 6. WSTRG = 0
+subplot(4,2,6); 
+plot(x6,y6); 
+title('w_{StrG} = 0', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
+
+% 7. WCSTR = 0
+subplot(4,2,7); 
+plot(x7,y7); 
+title('w_{CStr} = 0', 'FontSize', fontsize); 
+axis([0 1 0 400]);
+set(gca, 'FontSize', fontsize);
+
+% 8. STATS
+subplot(4,2,8)
+hold on
+experimental = [5, 65, 125, 45, 100, 155, 14];
+simulation = [minSTN, meanSTN, maxSTN, minGP, meanGP, maxGP, freq];
+
+plot(experimental, 'bx', 'LineWidth', 2, 'MarkerSize', 8)
+plot(simulation, 'ro', 'MarkerSize', 6)
+legend({'Exp', 'Sim'}, 'FontSize', fontsize, 'Location', 'Best')
+set(gca, 'XTick', 1:7, 'XTickLabel', {'minS','meanS','maxS','minG','meanG','maxG','Hz'})
 grid on
-if plot_flag == 1;
 
-h_legend = legend('experimental','simulation');
-lh=findall(gcf,'tag','legend');
-lp=get(lh,'position');
-set(lh,'position',[0.40,0.185,lp(3:4)]);
+% Add X-label to the bottom plot
+xlabel('Statistic / Frequency', 'FontSize', fontsize);
 
-set(h_legend,'FontSize',fontsize);
-ylabel({'Firing rate (spk/s) or' ;'oscillation frequency (Hz)'},'fontsize',fontsize)
-hold off
+% Save
+script_folder = fileparts(mfilename('fullpath'));
+saveas(gcf, fullfile(script_folder, 'output_figure'));
+
 end
-
-%% 
-
-subplot(7,2,plot_flag_vec(1))
-plot(x1,y1)
-if plot_flag == 1;
-ylabel('Firing rate (spk/s)','fontsize',fontsize)
-end
-if plot_flag == 1;
-h_legend = legend('STN','GP', 'E', 'I');
-set(h_legend,'FontSize',fontsize);
-end
-
-% Headers for set of subplots
-if plot_flag == 1;
-    descr = {'Resonance Model'};
-    ax = gca;
-    axes(ax) 
-    text(0.3,250,descr,'fontsize',10);
-elseif plot_flag == 2;
-    descr = {'Feedback Model'};
-    ax = gca;
-    axes(ax) 
-    text(0.3,370,descr,'fontsize',10);
-end
-
-set(gca, 'Units', 'Normalized');
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'FontSize'    , labelsize                           );
-
-descr = {'Intact'};
-ax = gca;
-axes(ax) 
-h = text(annotation_horz_pos,annotation_vert_pos,descr,'fontsize',annotate_fontsize);
-set(h, 'rotation', 90)
-
-%% 
-subplot(7,2,plot_flag_vec(2))
-plot(x2,y2)
-if plot_flag == 1;
-ylabel('Firing rate (spk/s)','fontsize',fontsize)
-end
-
-set(gca, 'Units', 'Normalized');
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'FontSize'    , labelsize                               );
-
-descr = {'W_{GS}=0'};
-ax = gca;
-axes(ax) 
-h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
-set(h, 'rotation', 90)
-
-subplot(7,2,plot_flag_vec(3))
-plot(x3,y3)
-if plot_flag == 1;
-ylabel('Firing rate (spk/s)','fontsize',fontsize)
-end
-
-set(gca, 'Units', 'Normalized');
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'FontSize'    , labelsize                               );
-
-descr = {'W_{SG}=0'};
-ax = gca;
-axes(ax) 
-h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
-set(h, 'rotation', 90)
-
-%%
-subplot(7,2,plot_flag_vec(4))
-plot(x4,y4)
-if plot_flag == 1;
-ylabel('Firing rate (spk/s)','fontsize',fontsize)
-end
-
-set(gca, 'Units', 'Normalized');
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'FontSize'    , labelsize                               );
-
-descr = {'W_{CS}=0'};
-ax = gca;
-axes(ax) 
-h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
-set(h, 'rotation', 90)
-
-%% 
-subplot(7,2,plot_flag_vec(5))
-plot(x5,y5)
-if plot_flag == 1;
-ylabel('Firing rate (spk/s)','fontsize',fontsize)
-end
-
-set(gca, 'Units', 'Normalized');
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'FontSize'    , labelsize                               );
-
-descr = {'Str = 0'};
-ax = gca;
-axes(ax) 
-h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
-set(h, 'rotation', 90)
-
-%% 
-subplot(7,2,plot_flag_vec(6))
-plot(x6,y6)
-if plot_flag == 1;
-ylabel('Firing rate (spk/s)','fontsize',fontsize)
-end
-xlabel('Time (s)','fontsize',fontsize)
-xlabh = gca();
-
-if plot_flag == 1;
-    ylimits = ylim; 
-set(get(xlabh, 'XLabel'), 'Position', [0.5 -ylimits(2)/6 0])
-elseif plot_flag == 2;
-    ylimits = ylim; 
-set(get(xlabh, 'XLabel'), 'Position', [0.5 -ylimits(2)/6 0])
-end
-
-set(gca, 'Units', 'Normalized');
-set(gca, ...
-    'Box'         , 'on'                        , ...
-    'LooseInset'  , get(gca, 'TightInset') * 1.5 , ...
-    'TickDir'     , 'in'                         , ...
-    'TickLength'  , [.02 .02]                    , ...
-    'LineWidth'   , 1                            , ...
-    'FontSize'    , labelsize                               );
-
-descr = {'w_{SC} = 0'};
-ax = gca;
-axes(ax) 
-h = text(annotation_horz_pos,annotation_vert_pos,0,descr,'fontsize',annotate_fontsize);
-set(h, 'rotation', 90)
-
-%% 
-save_handle = subplot(7,2,plot_flag_vec(6));
-saveas(save_handle, 'output_figure')
-
-end 

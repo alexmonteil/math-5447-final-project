@@ -60,13 +60,13 @@ Mi = var(15)*10; % Ctx I Max firing rate
 % additional fixed parameters
 taus = 12.8*10^-3; % STN time constant
 taug = 20*10^-3; % GPe time constant
-tauStr = 20*10^-3; % Striatum time constant
-Ms=300; % STN Max firing rate
+tauStr = 10.5*10^-3; % Striatum time constant
+Ms= 300; % STN Max firing rate
 Mg = 400; % GPe Max firing rate
-MStr = 400; % Striatum Max firing rate
+MStr = 15; % Striatum Max firing rate
 Bs = 10; % STN baseline firing rate
 Bg = 20; % GPe baseline firing rate
-BStr = 20; % Striatum baseline firing rate
+BStr = 3.85; % Striatum baseline firing rate
 
 v = zeros(4,1);
 

@@ -14,10 +14,10 @@ function run_simulation_manual
     
     
     % 2. Define manual weights
-    wstrg = 12;       % Weight: Striatum -> GPe (var 16)
-    wcstr = 13;       % Weight: Cortex -> Striatum (var 17)
-    Tstrg = 14;       % Delay: Striatum -> GPe (ms) (var 18)
-    Tcstr = 15;       % Delay: Cortex -> Striatum (ms) (var 19)
+    wstrg = 3.1;       % Weight: Striatum -> GPe (var 16)
+    wcstr = 9.9709;       % Weight: Cortex -> Striatum (var 17)
+    Tstrg = 10;       % Delay: Striatum -> GPe (ms) (var 18)
+    Tcstr = 6;       % Delay: Cortex -> Striatum (ms) (var 19)
     
     % Construct full parameter vector for feedback-derived model
     original_params = var_data.weights(2, :); 

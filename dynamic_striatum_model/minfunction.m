@@ -33,15 +33,15 @@ function [k, Features_opt, time_info, WEIGHT_OF_FREQ] = minfunction(var)
 %                delays, history, and tspan
 
 if var(:) >= 0
+
+Tcc = var(9)/1000; % rescale variable
+Tstrg = var(18)/1000; % Striatum to GPe delay rescaled
+Tcstr = var(19)/1000; % Cortex to Striatum delay rescaled
     
 % time_info   
 totaltime = 1;
 tspan = [0,totaltime];
 history = [0.1, 0.1, 0.1, 0.1, 0.1];
-
-Tcc = var(9)/1000; % rescale variable
-Tstrg = var(18)/1000; % Striatum to GPe delay rescaled
-Tcstr = var(19)/1000; % Cortex to Striatum delay rescaled
 
 %lag = [(Tsg,Tgs),Tgg   , Tcs      , Tsc       , Tcc, Tstrg, Tcstr]
 lag = [6*10^-3, 4*10^-3, 5.5*10^-3, 21.5*10^-3, Tcc, Tstrg, Tcstr];

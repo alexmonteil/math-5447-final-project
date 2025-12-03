@@ -11,10 +11,10 @@ function run_simulation_manual
     var_data = load('weights.mat');
     
     % 2. Define manual weights
-    wlc = 12;       % Weight: Long Loop -> Cortex (var 16)
-    wsl = 13;       % Weight: STN -> Long Loop (var 17)
-    Tlc = 14;       % Delay: L -> Cortex (ms) (var 18)
-    Tsl = 15;       % Delay: STN -> L (ms) (var 19)
+    wlc = 4.4626;       % Weight: Long Loop -> Cortex (var 16)
+    wsl = 4.4626;       % Weight: STN -> Long Loop (var 17)
+    Tlc = 5.6;       % Delay: L -> Cortex (ms) (var 18)
+    Tsl = 4.5;       % Delay: STN -> L (ms) (var 19)
 
     original_params = var_data.weights(2, :); 
     full_var = [original_params, wlc, wsl, Tlc, Tsl];

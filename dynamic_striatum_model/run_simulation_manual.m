@@ -4,6 +4,7 @@ function run_simulation_manual
     % weights for new network connections. 
     % Does NOT optimize. Plots both Resonance and Feedback cases.
 
+
     % 1. Setup
     if ~exist('model_eqs.m', 'file')
         addpath(pwd); 
@@ -31,4 +32,11 @@ function run_simulation_manual
     generate_fig(Features_opt);
 
     disp('Manual simulation complete.');
+
+    % 4. weight sweep
+    sweep=1;
+    if sweep
+        weight_sweep(full_var,[16 17],[1 20;1 20],1);
+        
+    end
 end

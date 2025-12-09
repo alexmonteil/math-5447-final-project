@@ -81,8 +81,7 @@ for i = 1:NumCond
     if i == 5;
         % Model with wsl = 0
         var(17) = 0;
-        % Note: uncomment if we want to compensate for lost input
-        % flagC = 1;
+        flagC = 1;
     end
     
     if i == 6;
@@ -93,6 +92,7 @@ for i = 1:NumCond
     if i == 7;
         % Model with wlc = 0
         var(16) = 0;
+        flagC = 1;
     end
     
      sol = dde23(@model_eqs,lag,history,tspan,[],var,flagSTN,flagC,AdjSTN,AdjC);
@@ -110,20 +110,21 @@ for i = 1:NumCond
         maxGP  = max(y1(2,(round(length(y1)/2)):end));
         meanGP = mean(y1(2,(round(length(y1)/2)):end));
         
-        meanE = mean(y1(3,(round(length(y1)/2)):end));     
+        meanE = mean(y1(3,(round(length(y1)/2)):end));
+        meanL = mean(y1(5,(round(length(y1)/2)):end));
    
-            FMminSTN  = 5   - minSTN;
-            FMmeanSTN = 65  - meanSTN;
-            FMmaxSTN  = 125 - maxSTN;
-            FMminGP   = 45  - minGP;
-            FMmeanGP  = 100 - meanGP;
-            FMmaxGP   = 155 - maxGP;
+        FMminSTN  = 5   - minSTN;
+        FMmeanSTN = 65  - meanSTN;
+        FMmaxSTN  = 125 - maxSTN;
+        FMminGP   = 45  - minGP;
+        FMmeanGP  = 100 - meanGP;
+        FMmaxGP   = 155 - maxGP;
            
         freq = frequency(x1, y1, meanSTN, totaltime);
         FMfreq = 14 - freq;
         
         AdjSTN = meanE * var(6);  % AdjSTN = meanFRe*wcs
-        AdjC = meanSTN * var(7);  % AdjC = meanFRs * wsc
+        AdjC = meanL * var(16);  % AdjC = meanL * wlc
     end
     
     if i == 2;

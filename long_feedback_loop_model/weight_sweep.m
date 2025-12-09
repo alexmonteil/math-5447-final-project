@@ -24,7 +24,7 @@ function weight_sweep(var,sweepVars, sweepRange, sweepStep)
     end
     figure
     heatmap(sweepVals1,sweepVals2,out,'Colormap',jet)
-    xlabel('w_L_C')
-    ylabel('w_S_L')
+    xlabel('w_S_L')
+    ylabel('w_L_C')
 
 end

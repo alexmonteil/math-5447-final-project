@@ -12,9 +12,9 @@ function run_simulation_manual
     
     % 2. Define manual weights
     % wlc = 4.4626;       % Weight: Long Loop -> Cortex (var 16)
-    wlc = 11;
+    wlc = 1;
     % wsl = 4.4626;       % Weight: STN -> Long Loop (var 17)
-    wsl = 1;
+    wsl = 11;
     Tlc = 5.6;       % Delay: L -> Cortex (ms) (var 18)
     Tsl = 4.5;       % Delay: STN -> L (ms) (var 19)
 
@@ -33,7 +33,7 @@ function run_simulation_manual
     % 4. weight sweep
     sweep=0;
     if sweep
-        weight_sweep(full_var,[16 17],[1 15;1 15],1);
+        weight_sweep(full_var,[16 17],[1 15;1 15],0.5);
         
     end
 end
